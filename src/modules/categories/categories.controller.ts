@@ -9,7 +9,7 @@ export class CategoriesController {
 
   @UsePipes(new ValidationPipe())
   @Post()
-  async createCategory(@Body() categoryData: CreateCategoryDto) {
+  async createCategory (@Body() categoryData: CreateCategoryDto) {
     return await this.categoriesService.create(categoryData);
   }
 }
