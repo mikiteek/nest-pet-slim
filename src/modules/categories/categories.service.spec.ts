@@ -1,33 +1,42 @@
 import {Test, TestingModule} from '@nestjs/testing';
-import {CategoriesController} from './categories.controller';
+import {getModelToken} from "@nestjs/sequelize";
+import {ConflictException} from "@nestjs/common";
+import {Category} from "./category.model";
 import {CategoriesService} from "./categories.service";
 
-const testCategory = {name: "milk", id: 1};
+const testCategoryReq = {name: "milk"};
+const testCategoryRes = {name: "milk", id: 1};
 
 describe('CategoriesController', () => {
-  let categoriesController: CategoriesController;
+  let categoriesService: CategoriesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CategoriesController],
       providers: [
+        CategoriesService,
         {
-          provide: CategoriesService,
+          provide: getModelToken(Category),
           useValue: {
-            create: jest.fn(() => testCategory),
+            findOne: jest.fn(() => null),
           },
         },
       ],
     }).compile();
-
-    categoriesController = module.get<CategoriesController>(CategoriesController);
+    categoriesService = module.get(CategoriesService);
   });
+
+  it("should return new category", async () => {
+    expect(await categoriesService.create(testCategoryReq)).toEqual(testCategoryRes);
+  });
+
+  // it("should return new category", async () => {
+  //   expect(async () => {
+  //     await categoriesService.create(testCategoryReq);
+  //   }).toThrow(ConflictException);
+  // });
 
   it('should be defined', () => {
-    expect(categoriesController).toBeDefined();
-  });
-  it("should return new category", async () => {
-    expect(await categoriesController.createCategory(testCategory)).toEqual(testCategory);
+    expect(categoriesService).toBeDefined();
   });
 
   // it("should throw conflict exception", () => {
