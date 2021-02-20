@@ -1,66 +1,62 @@
-import {Test, TestingModule} from '@nestjs/testing';
-import {getModelToken} from "@nestjs/sequelize";
-import {ConflictException} from "@nestjs/common";
-import {Category} from "./category.model";
-import {CategoriesService} from "./categories.service";
+import { Test, TestingModule } from '@nestjs/testing';
+import { getModelToken } from "@nestjs/sequelize";
+import { ConflictException } from "@nestjs/common";
+import { Category } from "./category.model";
+import { CategoriesService } from "./categories.service";
 
-const testCategoryReq = {name: "milk"};
-const testCategoryRes = {name: "milk", id: 1};
+const testCategoryReq = {name: "nutella"};
+const testCategoryRes = {name: "nutella", id: 1};
+
+const findOneEmpty = jest.fn(() => null);
+const findOneValue = jest.fn(() => testCategoryRes);
+const createCategoryMock = jest.fn(() => testCategoryRes);
 
 describe('CategoriesController', () => {
   let categoriesService: CategoriesService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        CategoriesService,
-        {
-          provide: getModelToken(Category),
-          useValue: {
-            findOne: jest.fn(() => null),
+  describe("When same category already exist", () => {
+    beforeAll(async () => {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          CategoriesService,
+          {
+            provide: getModelToken(Category),
+            useValue: {
+              findOne: findOneValue,
+              create: createCategoryMock,
+            }
           },
-        },
-      ],
-    }).compile();
-    categoriesService = module.get(CategoriesService);
+        ],
+      }).compile();
+      categoriesService = module.get(CategoriesService);
+    });
+
+    it("should throw error", async () => {
+      expect(async () => {
+        await categoriesService.create(testCategoryReq);
+      }).rejects.toThrow(ConflictException);
+    });
   });
 
-  it("should return new category", async () => {
-    expect(await categoriesService.create(testCategoryReq)).toEqual(testCategoryRes);
+  describe("When same category does not exist", () => {
+    beforeAll(async () => {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          CategoriesService,
+          {
+            provide: getModelToken(Category),
+            useValue: {
+              findOne: findOneEmpty,
+              create: createCategoryMock,
+            }
+          },
+        ],
+      }).compile();
+      categoriesService = module.get(CategoriesService);
+    });
+
+    it("should return new category", async () => {
+      expect(await categoriesService.create(testCategoryReq)).toEqual(testCategoryRes);
+    });
   });
-
-  // it("should return new category", async () => {
-  //   expect(async () => {
-  //     await categoriesService.create(testCategoryReq);
-  //   }).toThrow(ConflictException);
-  // });
-
-  it('should be defined', () => {
-    expect(categoriesService).toBeDefined();
-  });
-
-  // it("should throw conflict exception", () => {
-  //   const spyCategoryFindOne = jest.spyOn(Category, "findOne");
-  //   spyCategoryFindOne.mockResolvedValue(testCategoryDataRes);
-  //
-  //   expect(() => {
-  //     categoriesController.createCategory(testCategoryDataReq);
-  //   }).toThrow(ConflictException);
-  // });
-  //
-  // it("should return testCategoryDataRes", () => {
-  //   const spyCategoryFindOne = jest.spyOn(Category, "findOne");
-  //   spyCategoryFindOne.mockResolvedValue(null);
-  //   jest.spyOn(category, "save").mockResolvedValue(testCategoryDataRes);
-  //
-  //   expect(categoriesController.createCategory(testCategoryDataReq)).toEqual(testCategoryDataRes);
-  // });
-  //
-  // it("should return testCategoryDataRes", () => {
-  //   const spyCategoryFindOne = jest.spyOn(Category, "findOne");
-  //   spyCategoryFindOne.mockResolvedValue(null);
-  //   jest.spyOn(categoriesService, "create").mockResolvedValue(testCategoryDataRes);
-  //
-  //   expect(categoriesController.createCategory(testCategoryDataReq)).toEqual(testCategoryDataRes);
-  // });
 });
