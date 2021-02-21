@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getModelToken } from "@nestjs/sequelize";
-import { ConflictException } from "@nestjs/common";
-import { Category } from "./category.model";
-import { CategoriesService } from "./categories.service";
+import {Test, TestingModule} from '@nestjs/testing';
+import {getModelToken} from "@nestjs/sequelize";
+import {ConflictException} from "@nestjs/common";
+import {Category} from "./category.model";
+import {CategoriesService} from "./categories.service";
 
 const testCategoryReq = {name: "nutella"};
 const testCategoryRes = {name: "nutella", id: 1};

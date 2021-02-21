@@ -9,12 +9,19 @@ export class CategoriesService {
     @InjectModel(Category)
     private readonly categoryRepo: typeof Category,
   ) {}
-
-    async create (categoryData: CreateCategoryDto): Promise<Category> {
+  async create (categoryData: CreateCategoryDto): Promise<Category> {
     const categoryExisted = await this.categoryRepo.findOne({where: {name: categoryData.name}});
     if (categoryExisted) {
       throw new ConflictException({message: "Name must be unique"});
     }
     return await this.categoryRepo.create(categoryData);
+  }
+
+  async remove (id: number): Promise<number> {
+    const destroyedCount = await this.categoryRepo.destroy({where: {id}});
+    if (destroyedCount < 1) {
+
+    }
+    return destroyedCount;
   }
 }
