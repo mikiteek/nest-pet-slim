@@ -1,7 +1,7 @@
-import { Controller, Post, Body, UsePipes } from '@nestjs/common';
-import { CreateCategoryDto } from "./dbo/create-category.dto";
-import { CategoriesService } from "./categories.service";
-import { ValidationPipe } from "../../shared/pipes/validation.pipe";
+import {Controller, Post, Body, UsePipes, Delete, Param, ParseIntPipe} from '@nestjs/common';
+import {CreateCategoryDto} from "./dbo/create-category.dto";
+import {CategoriesService} from "./categories.service";
+import {ValidationPipe} from "../../shared/pipes/validation.pipe";
 
 @Controller('categories')
 export class CategoriesController {
@@ -11,5 +11,10 @@ export class CategoriesController {
   @Post()
   async createCategory (@Body() categoryData: CreateCategoryDto) {
     return await this.categoriesService.create(categoryData);
+  }
+
+  @Delete(":id")
+  async removeCategory(@Param("id", ParseIntPipe) id: number) {
+    return await this.categoriesService.remove(id);
   }
 }
