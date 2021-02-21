@@ -1,6 +1,7 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {CategoriesController} from './categories.controller';
 import {CategoriesService} from "./categories.service";
+import arrayContaining = jasmine.arrayContaining;
 
 const testCategory = {name: "milk", id: 1};
 const testDestroyedCount = 1;
@@ -17,6 +18,7 @@ describe('CategoriesController', () => {
           useValue: {
             create: jest.fn(() => testCategory),
             remove: jest.fn(() => testDestroyedCount),
+            getList: jest.fn(() => [testCategory, testCategory]),
           },
         },
       ],
@@ -35,5 +37,9 @@ describe('CategoriesController', () => {
 
   it("should return count of destroyed rows as 1", async () => {
     expect(await categoriesController.removeCategory(testCategory.id)).toEqual(testDestroyedCount);
+  });
+
+  it("should return array of categories", async () => {
+    expect(await categoriesController.getListCategories()).toEqual(arrayContaining([testCategory]));
   });
 });
