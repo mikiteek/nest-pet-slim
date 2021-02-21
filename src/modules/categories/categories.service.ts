@@ -25,4 +25,8 @@ export class CategoriesService {
     }
     return destroyedCount;
   }
+
+  async getList (): Promise<Category[]> {
+    return await this.categoryRepo.findAll();
+  }
 }
