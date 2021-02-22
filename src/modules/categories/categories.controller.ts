@@ -1,9 +1,9 @@
-import {Controller, Post, Body, UsePipes, Delete, Param, ParseIntPipe, Get} from '@nestjs/common';
+import {Controller, Post, Body, UsePipes, Delete, Param, ParseIntPipe, Get, UseFilters} from '@nestjs/common';
 import {CreateCategoryDto} from "./dbo/create-category.dto";
 import {CategoriesService} from "./categories.service";
 import {ValidationPipe} from "../../shared/pipes/validation.pipe";
 
-@Controller('categories')
+@Controller("categories")
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
