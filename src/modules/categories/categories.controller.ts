@@ -1,5 +1,5 @@
 import {Controller, Post, Body, UsePipes, Delete, Param, ParseIntPipe, Get, UseFilters} from '@nestjs/common';
-import {CreateCategoryDto} from "./dbo/create-category.dto";
+import {CreateCategoryDto} from "./dto/create-category.dto";
 import {CategoriesService} from "./categories.service";
 import {ValidationPipe} from "../../shared/pipes/validation.pipe";
 

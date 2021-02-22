@@ -1,5 +1,5 @@
 import {Controller, Post, UsePipes, Body} from "@nestjs/common";
-import {CreateProductDbo} from "./dbo/create-product.dbo";
+import {CreateProductDto} from "./dto/create-product.dto";
 import {ProductsService} from "./products.service";
 import {ValidationPipe} from "../../shared/pipes/validation.pipe";
 
@@ -9,7 +9,7 @@ export class ProductsController {
 
   @UsePipes(new ValidationPipe())
   @Post()
-  async createProduct (@Body() productData: CreateProductDbo) {
+  async createProduct (@Body() productData: CreateProductDto) {
     return await this.productsService.create(productData);
   }
 }

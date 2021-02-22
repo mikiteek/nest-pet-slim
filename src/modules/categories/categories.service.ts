@@ -1,7 +1,7 @@
 import {ConflictException, Injectable} from "@nestjs/common";
 import {InjectModel} from "@nestjs/sequelize"
 import {Category} from "./category.model";
-import {CreateCategoryDto} from "./dbo/create-category.dto";
+import {CreateCategoryDto} from "./dto/create-category.dto";
 import {NoContentException} from "../../shared/exceptions/no-content.exception";
 
 @Injectable()

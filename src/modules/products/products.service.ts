@@ -1,7 +1,7 @@
 import {Injectable} from "@nestjs/common";
 import {InjectModel} from "@nestjs/sequelize";
 import {Product} from "./product.model";
-import {CreateProductDbo} from "./dbo/create-product.dbo";
+import {CreateProductDto} from "./dto/create-product.dto";
 import {ConflictException} from "@nestjs/common";
 
 
@@ -11,7 +11,7 @@ export class ProductsService {
     @InjectModel(Product)
     private readonly productRepo: typeof Product,
   ) {}
-  async create (productData: CreateProductDbo): Promise<Product> {
+  async create (productData: CreateProductDto): Promise<Product> {
     const productExisted = await this.productRepo.findOne(
       {
         where: {

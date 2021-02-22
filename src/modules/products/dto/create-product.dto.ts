@@ -1,6 +1,6 @@
 import {IsString, IsNumber, IsPositive, IsNotEmpty} from "class-validator";
 
-export class CreateProductDbo {
+export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   title: string;
