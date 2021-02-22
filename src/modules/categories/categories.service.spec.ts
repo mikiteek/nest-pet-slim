@@ -4,7 +4,6 @@ import {ConflictException} from "@nestjs/common";
 import {Category} from "./category.model";
 import {CategoriesService} from "./categories.service";
 import {NoContentException} from "../../shared/exceptions/no-content.exception";
-import arrayContaining = jasmine.arrayContaining;
 
 const testCategoryReq = {name: "nutella"};
 const testCategoryRes = {name: "nutella", id: 1};
@@ -131,7 +130,7 @@ describe('CategoriesService getList', () => {
     });
 
     it("should return array of categories", async () => {
-      expect(await categoriesService.getList()).toEqual(arrayContaining([testCategoryRes]));
+      expect(await categoriesService.getList()).toEqual(expect.arrayContaining([testCategoryRes]));
     });
   });
 });

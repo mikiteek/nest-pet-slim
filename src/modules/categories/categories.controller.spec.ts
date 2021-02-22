@@ -1,7 +1,6 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {CategoriesController} from './categories.controller';
 import {CategoriesService} from "./categories.service";
-import arrayContaining = jasmine.arrayContaining;
 
 const testCategory = {name: "milk", id: 1};
 const testDestroyedCount = 1;
@@ -40,6 +39,6 @@ describe('CategoriesController', () => {
   });
 
   it("should return array of categories", async () => {
-    expect(await categoriesController.getListCategories()).toEqual(arrayContaining([testCategory]));
+    expect(await categoriesController.getListCategories()).toEqual(expect.arrayContaining([testCategory]));
   });
 });
