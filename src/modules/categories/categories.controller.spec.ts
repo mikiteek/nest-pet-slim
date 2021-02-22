@@ -1,10 +1,13 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {CategoriesController} from './categories.controller';
 import {CategoriesService} from "./categories.service";
-
-const testCategoryRes = {name: "milk", id: 1};
-const testCategoryReq = {name: "milk"};
-const testDestroyedCount = 1;
+import {
+  testCategoryReq,
+  testCategoryRes,
+  toDestroyCategory,
+  toReturnCategory,
+  toReturnListCategories,
+} from "./test-helpers/category.variables";
 
 describe("CategoriesController", () => {
   let categoriesController: CategoriesController;
@@ -16,9 +19,9 @@ describe("CategoriesController", () => {
         {
           provide: CategoriesService,
           useValue: {
-            create: jest.fn(() => testCategoryRes),
-            remove: jest.fn(() => testDestroyedCount),
-            getList: jest.fn(() => [testCategoryRes, testCategoryRes]),
+            create: toReturnCategory,
+            remove: toDestroyCategory,
+            getList: toReturnListCategories,
           },
         },
       ],
@@ -36,7 +39,7 @@ describe("CategoriesController", () => {
   });
 
   it("should return count of destroyed rows as 1", async () => {
-    expect(await categoriesController.removeCategory(testCategoryRes.id)).toEqual(testDestroyedCount);
+    expect(await categoriesController.removeCategory(testCategoryRes.id)).toEqual(1);
   });
 
   it("should return array of categories", async () => {

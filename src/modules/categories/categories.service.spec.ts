@@ -4,15 +4,17 @@ import {ConflictException} from "@nestjs/common";
 import {Category} from "./category.model";
 import {CategoriesService} from "./categories.service";
 import {NoContentException} from "../../shared/exceptions/no-content.exception";
+import {
+  testCategoryReq,
+  testCategoryRes,
+  toReturnNull,
+  toReturnCategory,
+  toReturnListCategories,
+  toDestroyCategory,
+  nothingToDestroy,
+} from "./test-helpers/category.variables";
 
-const testCategoryReq = {name: "nutella"};
-const testCategoryRes = {name: "nutella", id: 1};
-
-const findOneEmpty = jest.fn(() => null);
-const findOneValue = jest.fn(() => testCategoryRes);
-const createCategoryMock = jest.fn(() => testCategoryRes);
-
-describe('CategoriesService create', () => {
+describe("CategoriesService create", () => {
   let categoriesService: CategoriesService;
 
   describe("When same category already exist", () => {
@@ -23,8 +25,8 @@ describe('CategoriesService create', () => {
           {
             provide: getModelToken(Category),
             useValue: {
-              findOne: findOneValue,
-              create: createCategoryMock,
+              findOne: toReturnCategory,
+              create: toReturnCategory,
             }
           },
         ],
@@ -47,8 +49,8 @@ describe('CategoriesService create', () => {
           {
             provide: getModelToken(Category),
             useValue: {
-              findOne: findOneEmpty,
-              create: createCategoryMock,
+              findOne: toReturnNull,
+              create: toReturnCategory,
             }
           },
         ],
@@ -73,7 +75,7 @@ describe('CategoriesService delete', () => {
           {
             provide: getModelToken(Category),
             useValue: {
-              destroy: jest.fn(() => 0),
+              destroy: nothingToDestroy,
             }
           },
         ],
@@ -96,7 +98,7 @@ describe('CategoriesService delete', () => {
           {
             provide: getModelToken(Category),
             useValue: {
-              destroy: jest.fn(() => 1),
+              destroy: toDestroyCategory,
             }
           },
         ],
@@ -121,7 +123,7 @@ describe('CategoriesService getList', () => {
           {
             provide: getModelToken(Category),
             useValue: {
-              findAll: jest.fn(() => [testCategoryRes, testCategoryRes]),
+              findAll: toReturnListCategories,
             }
           },
         ],

@@ -1,19 +1,11 @@
 import {Test, TestingModule} from '@nestjs/testing';
 import {ProductsController} from "./products.controller";
 import {ProductsService} from "./products.service";
-
-const testProductRes = {
-  title: "fried eggs",
-  weight: 100,
-  calories: 320,
-  id: 1,
-};
-
-const testProductReq = {
-  title: "fried eggs",
-  weight: 100,
-  calories: 320,
-};
+import {
+  testProductRes,
+  testProductReq,
+  toReturnProduct,
+} from "./test-helpers/product.variables";
 
 describe("ProductsController", () => {
   let productsController: ProductsController;
@@ -25,7 +17,7 @@ describe("ProductsController", () => {
         {
           provide: ProductsService,
           useValue: {
-            create: jest.fn(() => testProductRes),
+            create: toReturnProduct,
           }
         },
       ],
